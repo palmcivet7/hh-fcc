@@ -37,13 +37,15 @@ contract FundMe {
         s_priceFeed = AggregatorV3Interface(s_priceFeedAddress);
     }
 
-    // receive() external payable {
-    //     fund();
-    // }
+    receive() external payable {
+        fund();
+    }
 
-    // fallback() external payable {
-    //     fund();
-    // }
+    fallback() external payable {
+        if (msg.value > 100) {
+            fund();
+        }
+    }
 
     function fund() public payable {
         require(
@@ -103,5 +105,19 @@ contract FundMe {
 
     function getPriceFeed() public view returns (AggregatorV3Interface) {
         return s_priceFeed;
+    }
+
+    function supportsInterface(
+        bytes4 interfaceID
+    ) external pure returns (bool) {
+        return true;
+    }
+
+    function decimals() public pure returns (uint8) {
+        return 18;
+    }
+
+    function symbol() public pure returns (string memory) {
+        return "FUND";
     }
 }
